@@ -1,8 +1,6 @@
 import argparse
 
-from bson.objectid import ObjectId
-from mongoengine import connect, Document, StringField, IntField, ListField
-
+from mongoengine import connect, Document, StringField, IntField, ListField, DoesNotExist
 
 uri = "mongodb+srv://tgranowsky:1k5DbllkCKU7UVYj@cluster0.xzz8ywk.mongodb.net/?retryWrites=true&w=majority"
 
@@ -32,47 +30,49 @@ class Cat(Document):
 
 
 def find():
-    return db.cats.find()
+    return Cat.objects.all()
 
 
 def create(name_: str, age_: int, features_: list):
-    new_record = db.cats.insert_one(
-        {"name": name_,
-         "age": age_,
-         "features": features_, }
-    )
+    new_record = Cat(name=name_, age=age_, features=features_)
+    new_record.save()
     return new_record
 
 
 def update(pk_: str, name_: str, age_: int, features_: list):
-    update_record = db.cats.update_one({"_id": ObjectId(pk_)}, {
-        "$set": {
-
-            "name": name_,
-            "age": age_,
-            "features": features_,
-        }})
+    update_record = Cat.objects(id=pk_).first()  # return cat of None
+    if update_record:
+        update_record.update(name=name_, age=age_, features=features_)
+        update_record.reload()
     return update_record
 
 
 def delete(pk_: str):
-    return db.cats.delete_one({"_id": ObjectId(pk_)})
+    try:
+        cat_to_del = Cat.objects.get(id=pk_)  # if cat does not exist it returns error DoesNotExist
+        cat_to_del.delete()
+        return cat_to_del
+    except DoesNotExist as err:
+        print(err)
+        return None
 
 
 def main():
     match action:
         case "create":
             res = create(name, age, features)
-            print(res)
+            print(res.to_mongo().to_dict())
         case "read":
             res = find()
-            print([el for el in res])
+            print([el.to_mongo().to_dict() for el in res])
         case "update":
             res = update(pk, name, age, features)
-            print(res)
+            if res:
+                print(res.to_mongo().to_dict())
         case "delete":
             res = delete(pk)
-            print(res)
+            if res:
+                print(res.to_mongo().to_dict())
         case _:
             print("Unknown command")
 
