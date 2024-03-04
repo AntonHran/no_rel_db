@@ -21,6 +21,20 @@ trio = ["trio (>=0.23)"]
 wmi = ["wmi (>=1.5.1)"]
 
 [[package]]
+name = "mongoengine"
+version = "0.28.1"
+description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "mongoengine-0.28.1-py3-none-any.whl", hash = "sha256:a8ec54e65021012477d1375f7a15057c9e7cb8052380a5dac552dee0bd3d9aae"},
+    {file = "mongoengine-0.28.1.tar.gz", hash = "sha256:19a73ab2ce0d064783018cdee43eda871ea7190cbb3f74ff1ace0bfdcaa23ca5"},
+]
+
+[package.dependencies]
+pymongo = ">=3.4,<5.0"
+
+[[package]]
 name = "pymongo"
 version = "4.6.2"
 description = "Python driver for MongoDB <http://www.mongodb.org>"
@@ -126,4 +140,4 @@ zstd = ["zstandard"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "e09aeb983b7179e6037df728ee0931f175534b75ba4c9dff8a70a05111be23b9"
+content-hash = "d2a2db8dd05f1402162fcd3e4427e5ae0c4964c323bf5d93c678f81bfddbc7a1"
