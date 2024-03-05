@@ -2,7 +2,8 @@ import argparse
 
 from mongoengine import connect, Document, StringField, IntField, ListField, DoesNotExist
 
-uri = "mongodb+srv://tgranowsky:1k5DbllkCKU7UVYj@cluster0.xzz8ywk.mongodb.net/?retryWrites=true&w=majority"
+from app import uri
+
 
 connect(db="test", host=uri)
 
