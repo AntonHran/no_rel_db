@@ -6,7 +6,7 @@ from bson.objectid import ObjectId
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-file_config = pathlib.Path(__file__).parent.joinpath("conf.ini")
+file_config = pathlib.Path(__file__).parent.joinpath("config.ini")
 config = configparser.ConfigParser()
 config.read(file_config)
 
