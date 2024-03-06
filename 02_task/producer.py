@@ -9,7 +9,7 @@ connection = pika.BlockingConnection(pika.ConnectionParameters(host="localhost",
 chanel = connection.channel()
 
 chanel.exchange_declare(exchange="Exchange_Name", exchange_type="direct")
-chanel.queue_declare(queue="queue_name")
+chanel.queue_declare(queue="queue_name", durable=True)
 chanel.queue_bind(exchange="Exchange_Name", queue="queue_name")
 
 
