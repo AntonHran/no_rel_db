@@ -12,10 +12,10 @@ def main():
         pika.ConnectionParameters(host="localhost", port=5672, credentials=credentials))
     chanel = connection.channel()
 
-    chanel.queue_declare(queue="queue_name")
+    chanel.queue_declare(queue="queue_name", durable=True)
 
-    def callback(ch, method, body):
-        message = json.load(body.decode())
+    def callback(ch, method, properties, body):
+        message = json.loads(body.decode())
         print(f" [x] Received: {message}")
         time.sleep(0.5)
         print(f" [x] Completed task: {method.delivery_tag}")
@@ -25,7 +25,7 @@ def main():
     chanel.basic_consume(queue="queue_name", on_message_callback=callback)
 
     print(" [x] Waiting for messages. To exit press CTRL+C")
-    chanel.stop_consuming()
+    chanel.start_consuming()
 
 
 if __name__ == '__main__':
