@@ -10,7 +10,7 @@ def main():
         pika.ConnectionParameters(host="localhost", port=5672, credentials=credentials))
     chanel = connection.channel()
 
-    chanel.queue_declare(queue="hello")
+    chanel.queue_declare(queue="queue_name")
 
     def callback(ch, method, body):
         print(f" [x] Received: {body.decode()}")
