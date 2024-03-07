@@ -1,7 +1,6 @@
 import os
 import sys
 import json
-import time
 
 import pika
 
@@ -12,17 +11,16 @@ def main():
         pika.ConnectionParameters(host="localhost", port=5672, credentials=credentials))
     chanel = connection.channel()
 
-    chanel.queue_declare(queue="queue_name", durable=True)
+    q = chanel.queue_declare(queue="", exclusive=True)
+    name_q = q.method.queue
+    chanel.queue_bind(exchange="Events Message", queue=name_q)
 
     def callback(ch, method, properties, body):
         message = json.loads(body.decode())
         print(f" [x] Received: {message}")
-        time.sleep(0.5)
-        print(f" [x] Completed task: {method.delivery_tag}")
-        ch.basic_ack(delivery_tag=method.delivery_tag)
 
-    chanel.basic_qos(prefetch_count=1)
-    chanel.basic_consume(queue="queue_name", on_message_callback=callback)
+    # chanel.basic_qos(prefetch_count=1)
+    chanel.basic_consume(queue=name_q, on_message_callback=callback)
 
     print(" [x] Waiting for messages. To exit press CTRL+C")
     chanel.start_consuming()
