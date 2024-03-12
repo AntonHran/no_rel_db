@@ -22,11 +22,12 @@ def seed_quotes(filename: str) -> None:
     with open(filename, encoding="utf-8") as fd:
         data: list[dict] = json.load(fd)
         for el in data:
-            author, *_ = Author.objects(fullname=el.get("author"))
-            quote = Quote(author=author,
-                          tags=el.get("tags"),
-                          quote=el.get("quote"))
-            quote.save()
+            # author, *_ = Author.objects(fullname=el.get("author"))
+            print(Author.objects(fullname=el.get("fullname")))
+            # quote = Quote(author=author,
+                          # tags=el.get("tags"),
+                          # quote=el.get("quote"))
+            # quote.save()
 
 
 if __name__ == '__main__':
