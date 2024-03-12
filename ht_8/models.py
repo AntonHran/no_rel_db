@@ -3,8 +3,6 @@ from mongoengine import connect, Document, StringField, ReferenceField, ListFiel
 from app import uri
 
 
-# connect(db="quotes", host="mongodb://localhost:27017")
-
 connect(db="quotes", host=uri)
 
 
