@@ -22,13 +22,16 @@ def seed_quotes(filename: str) -> None:
     with open(filename, encoding="utf-8") as fd:
         data: list[dict] = json.load(fd)
         for el in data:
-            # author, *_ = Author.objects(fullname=el.get("author"))
-            author = Author.objects.filter(fullname=el.get("author"))
-            print(author.get().id)
-            quote = Quote(author=author.get().id,
-                          tags=el.get("tags"),
-                          quote=el.get("quote"))
-            quote.save()
+            try:
+                # author, *_ = Author.objects(fullname=el.get("author"))
+                author = Author.objects.filter(fullname=el.get("author"))
+                # print(author.get().id)
+                quote = Quote(author=author.get().id,
+                              tags=el.get("tags"),
+                              quote=el.get("quote"))
+                quote.save()
+            except NotUniqueError:
+                print(f"Quote already exists: {el.get('quote')}")
 
 
 if __name__ == '__main__':
