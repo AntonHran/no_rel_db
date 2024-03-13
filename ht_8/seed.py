@@ -23,7 +23,8 @@ def seed_quotes(filename: str) -> None:
         data: list[dict] = json.load(fd)
         for el in data:
             # author, *_ = Author.objects(fullname=el.get("author"))
-            print(Author.objects(fullname=el.get("fullname")))
+            author = Author.objects.filter(fullname=el.get("author"))
+            print(author.get().id)
             # quote = Quote(author=author,
                           # tags=el.get("tags"),
                           # quote=el.get("quote"))
