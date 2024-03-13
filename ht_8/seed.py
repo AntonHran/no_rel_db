@@ -25,10 +25,10 @@ def seed_quotes(filename: str) -> None:
             # author, *_ = Author.objects(fullname=el.get("author"))
             author = Author.objects.filter(fullname=el.get("author"))
             print(author.get().id)
-            # quote = Quote(author=author,
-                          # tags=el.get("tags"),
-                          # quote=el.get("quote"))
-            # quote.save()
+            quote = Quote(author=author.get().id,
+                          tags=el.get("tags"),
+                          quote=el.get("quote"))
+            quote.save()
 
 
 if __name__ == '__main__':
