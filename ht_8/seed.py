@@ -1,5 +1,5 @@
 import json
-import typing
+from typing import Callable
 
 from mongoengine.errors import NotUniqueError
 
@@ -29,7 +29,7 @@ def seed_quotes(el: dict) -> None:
         print(f"Quote already exists: {el.get('quote')}")
 
 
-def write_from_json(filename: str, func: typing.Callable) -> None:
+def write_from_json(filename: str, func: Callable) -> None:
     data = get_data(filename)
     for el in data:
         func(el)
