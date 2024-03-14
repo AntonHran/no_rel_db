@@ -30,7 +30,26 @@ def print_result(quotes):
         print("Nothing")
 
 
+def parse_entered_str(search: str):
+    field, value = search.split(":")
+    match field:
+        case "name":
+            return search_by_author(value)
+        case "tag":
+            return search_by_tag(value)
+        case "tags":
+            return search_by_tags(value)
+        case _:
+            print("Unknown field")
+
+
+def main():
+    search = ""
+    while search != "exit":
+        search = input("For search enter <field>:<value> ---> ")
+        quotes = parse_entered_str(search)
+        print_result(quotes)
+
+
 if __name__ == "__main__":
-    # search_by_author("Albert Einstein")
-    q = search_by_tags("life,live,value")
-    print_result(q)
+    main()
