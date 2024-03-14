@@ -18,9 +18,9 @@ def search_by_tags(tags: str):
     for tag in tags_:
         quotes = search_by_tag(tag)
         if quotes:
-            res.append(quotes)
-    print(res)
-    return set(*res)
+            res.append(*quotes)
+    # print(res)
+    return set(res)
 
 
 def print_result(quotes):
@@ -32,5 +32,5 @@ def print_result(quotes):
 
 if __name__ == "__main__":
     # search_by_author("Albert Einstein")
-    q = search_by_tags("life,live")
+    q = search_by_tags("life,live,value")
     print_result(q)
