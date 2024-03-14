@@ -1,15 +1,25 @@
+from mongoengine.errors import MongoEngineException, DoesNotExist
+
 from models import Author, Quote
 
 
 def search_by_author(author: str):
-    author_obj = Author.objects.filter(fullname=author).first()
-    quotes = Quote.objects.filter(author=author_obj.get().id).all()
-    return quotes
+    try:
+        author_obj = Author.objects.filter(fullname=author).first()
+        quotes = Quote.objects.filter(author=author_obj.id).all()
+        return quotes
+    except DoesNotExist:
+        print("NWF")
+    except AttributeError:
+        print("error")
 
 
 def search_by_tag(tag: str):
-    quotes = Quote.objects(tags=tag).all()
-    return quotes
+    try:
+        quotes = Quote.objects(tags=tag).all()
+        return quotes
+    except MongoEngineException:
+        print('some error')
 
 
 def search_by_tags(tags: str):
@@ -31,25 +41,30 @@ def print_result(quotes):
 
 
 def parse_entered_str(search: str):
-    field, value = search.split(":")
-    match field:
-        case "name":
-            return search_by_author(value)
-        case "tag":
-            return search_by_tag(value)
-        case "tags":
-            return search_by_tags(value)
-        case _:
-            print("Unknown field")
+    try:
+        field, value = search.split(":")
+        match field:
+            case "name":
+                return search_by_author(value)
+            case "tag":
+                return search_by_tag(value)
+            case "tags":
+                return search_by_tags(value)
+            case _:
+                print("Unknown field")
+    except ValueError as err:
+        print(err)
 
 
 def main():
-    search = ""
-    while search != "exit":
-        search = input("For search enter <field>:<value> ---> ")
+    while True:
+        search = input("\nTo search enter <field>:<value> ---> ")
+        if search == "exit":
+            break
         quotes = parse_entered_str(search)
         print_result(quotes)
 
 
 if __name__ == "__main__":
     main()
+    # print_result(search_by_author("Albert Einstein"))
