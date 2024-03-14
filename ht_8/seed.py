@@ -30,16 +30,21 @@ def seed_quotes(el: dict) -> None:
 
 
 def write_from_json(filename: str, func: typing.Callable) -> None:
+    data = get_data(filename)
+    for el in data:
+        func(el)
+
+
+def get_data(filename: str) -> list:
     with open(filename, encoding="utf-8") as fd:
         data: list[dict] = json.load(fd)
-        for el in data:
-            func(el)
+    return data
 
 
 def main():
-
+    write_from_json("authors.json", seed_authors)
+    write_from_json("quotes.json", seed_quotes)
 
 
 if __name__ == '__main__':
-    write_from_json("authors.json", seed_authors)
-    write_from_json("quotes.json", seed_quotes)
+    main()
