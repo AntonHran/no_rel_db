@@ -1,11 +1,18 @@
 from mongoengine.errors import MongoEngineException, DoesNotExist
+from redis import StrictRedis
+from redis_lru import RedisLRU
 
 from models import Author, Quote
 
 
+client = StrictRedis(host="localhost", port=6379, password=None)
+cache = RedisLRU(client)
+
+
+@cache
 def search_by_author(author: str):
     try:
-        author_obj = Author.objects.filter(fullname=author).first()
+        author_obj = Author.objects.filter(fullname__iregex=author).first()
         quotes = Quote.objects.filter(author=author_obj.id).all()
         return quotes
     except DoesNotExist:
@@ -14,9 +21,10 @@ def search_by_author(author: str):
         print("error")
 
 
+@cache
 def search_by_tag(tag: str):
     try:
-        quotes = Quote.objects(tags=tag).all()
+        quotes = Quote.objects(tags__iregex=tag).all()
         return quotes
     except MongoEngineException:
         print('some error')
