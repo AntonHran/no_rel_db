@@ -42,6 +42,8 @@ def search_by_tags(tags: str):
 
 
 def get_all_quotes():
+    quotes = Quote.objects().all()
+    print([quote.to_json() for quote in quotes])
 
 
 def print_result(quotes):
@@ -61,6 +63,8 @@ def parse_entered_str(search: str):
                 return search_by_tag(value)
             case "tags":
                 return search_by_tags(value)
+            case "quotes":
+                return get_all_quotes()
             case _:
                 print("Unknown field")
     except ValueError as err:
