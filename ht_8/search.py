@@ -41,6 +41,9 @@ def search_by_tags(tags: str):
     return set(res)
 
 
+def get_all_quotes():
+
+
 def print_result(quotes):
     if quotes:
         [print(quote.to_mongo().to_dict().get("quote")) for quote in quotes]
