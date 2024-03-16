@@ -43,7 +43,7 @@ def search_by_tags(tags: str):
 
 def get_all_quotes():
     quotes = Quote.objects().all()
-    print([quote.to_json() for quote in quotes])
+    [print(quote.to_json()) for quote in quotes]
 
 
 def print_result(quotes):
