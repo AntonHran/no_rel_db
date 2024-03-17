@@ -21,7 +21,7 @@ def main():
 
     def callback(ch, method, properties, body):
         pk = body.decode()
-        user_ = User.objects(id=pk, message_sent=False)
+        user_ = User.objects(id=pk, message_sent=False).first()
         if user_:
             user_.update(set__message_sent=True)
             print(f" [x] {consumer} has sent message to {user_.fullname} ({pk}) through phone: {user_.phone}")
