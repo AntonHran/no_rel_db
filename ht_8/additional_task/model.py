@@ -8,8 +8,9 @@ connect(db="quotes", host=uri)
 
 class User(Document):
     fullname = StringField(required=True, unique=True)
-    phone_number = StringField(max_length=30)
+    phone = StringField(max_length=30)
     email = StringField(max_length=100)
-    email_sent = BooleanField(default=False)
+    preferable_connection = StringField()
+    message_sent = BooleanField(default=False)
     position = StringField()
     meta = {"collection": "users"}
