@@ -49,10 +49,6 @@ def create_user():
 
 def create_task(nums: int):
     for i in range(nums):
-        '''user_ = User(fullname=fake.name(),
-                     phone_number=fake.phone_number(),
-                     email=fake.email(),
-                     position=fake.job()).save()'''
         user_ = create_user()
         if user_.preferable_connection == "email":
             chanel.basic_publish(exchange=exchange_name, routing_key=emails_queue,
@@ -66,4 +62,4 @@ def create_task(nums: int):
 
 
 if __name__ == '__main__':
-    create_task(randint(1, 100))
+    create_task(randint(1, 50))
