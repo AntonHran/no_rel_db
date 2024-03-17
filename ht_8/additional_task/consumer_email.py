@@ -17,13 +17,14 @@ def main():
 
     chanel.queue_declare(queue=emails_queue, durable=True)
 
-    # consumer = "HAE"
+    consumer = "email_consumer"
 
     def callback(ch, method, properties, body):
         pk = body.decode()
         user_ = User.objects(id=pk, message_sent=False)
         if user_:
             user_.update(set__message_sent=True)
+            print(f" [x] {consumer} has sent message to {user_.fullname} ({pk}) through email: {user_.email}")
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
     chanel.basic_qos(prefetch_count=1)
