@@ -1,4 +1,4 @@
-functions were addedimport os
+import os
 import sys
 
 import pika
@@ -21,9 +21,9 @@ def main():
 
     def callback(ch, method, properties, body):
         pk = body.decode()
-        user_ = User.objects(id=pk, completed=False)
+        user_ = User.objects(id=pk, email_sent=False)
         if user_:
-            user_.update(set__completed=True, set__consumer=consumer)
+            user_.update(set__email_sent=True)
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
     chanel.basic_qos(prefetch_count=1)
