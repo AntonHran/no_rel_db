@@ -15,19 +15,20 @@ def main():
                                                                    virtual_host=user))
     chanel = connection.channel()
 
-    chanel.queue_declare(queue=emails_queue, durable=True)
+    chanel.queue_declare(queue=sms_queue, durable=True)
 
-    # consumer = "HAE"
+    consumer = "sms_consumer"
 
     def callback(ch, method, properties, body):
         pk = body.decode()
         user_ = User.objects(id=pk, message_sent=False)
         if user_:
             user_.update(set__message_sent=True)
+            print(f" [x] {consumer} has sent message to {user_.fullname} ({pk}) through phone: {user_.phone}")
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
     chanel.basic_qos(prefetch_count=1)
-    chanel.basic_consume(queue=emails_queue, on_message_callback=callback)
+    chanel.basic_consume(queue=sms_queue, on_message_callback=callback)
 
     print(" [x] Waiting for messages. To exit press CTRL+C")
     chanel.start_consuming()
