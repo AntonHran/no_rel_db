@@ -10,11 +10,20 @@ cache = RedisLRU(client)
 
 
 @cache
-def search_by_author(author: str):
+def search_by_author(authors: list) -> list:
+    res = []
+    for author in authors:
+        quotes = Quote.objects.filter(author=author.id).all()
+        print(quotes)
+        res.extend(quotes)
+    return res
+
+
+def get_all_authors(author: str) -> list:
     try:
-        author_obj = Author.objects.filter(fullname__iregex=author).first()
-        quotes = Quote.objects.filter(author=author_obj.id).all()
-        return quotes
+        authors_objs = Author.objects.filter(full_name__iregex=author).all()
+        # print(authors_objs)
+        return authors_objs
     except DoesNotExist:
         print("NWF")
     except AttributeError:
@@ -36,7 +45,7 @@ def search_by_tags(tags: str):
     for tag in tags_:
         quotes = search_by_tag(tag)
         if quotes:
-            res.append(*quotes)
+            res.extend(quotes)
     # print(res)
     return set(res)
 
@@ -58,7 +67,8 @@ def parse_entered_str(search: str):
         field, value = search.split(":")
         match field:
             case "name":
-                return search_by_author(value)
+                authors = get_all_authors(value)
+                return search_by_author(authors)
             case "tag":
                 return search_by_tag(value)
             case "tags":
