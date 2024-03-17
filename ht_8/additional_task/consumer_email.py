@@ -4,7 +4,7 @@ import sys
 import pika
 
 from model import User
-from producer import user, password, host, queue_name
+from producer import user, password, host, emails_queue
 
 
 def main():
@@ -15,19 +15,19 @@ def main():
                                                                    virtual_host=user))
     chanel = connection.channel()
 
-    chanel.queue_declare(queue=queue_name, durable=True)
+    chanel.queue_declare(queue=emails_queue, durable=True)
 
     # consumer = "HAE"
 
     def callback(ch, method, properties, body):
         pk = body.decode()
-        user_ = User.objects(id=pk, email_sent=False)
+        user_ = User.objects(id=pk, message_sent=False)
         if user_:
-            user_.update(set__email_sent=True)
+            user_.update(set__message_sent=True)
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
     chanel.basic_qos(prefetch_count=1)
-    chanel.basic_consume(queue=queue_name, on_message_callback=callback)
+    chanel.basic_consume(queue=emails_queue, on_message_callback=callback)
 
     print(" [x] Waiting for messages. To exit press CTRL+C")
     chanel.start_consuming()
