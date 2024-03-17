@@ -11,5 +11,5 @@ class User(Document):
     phone_number = StringField(max_length=30)
     email = StringField(max_length=100)
     email_sent = BooleanField(default=False)
-    position = StringField(max_length=30)
+    position = StringField()
     meta = {"collection": "users"}
