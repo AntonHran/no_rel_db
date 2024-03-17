@@ -35,7 +35,7 @@ fake = Faker()
 
 def create_task(nums: int):
     for i in range(nums):
-        user_ = User(fullname=fake.fullname(),
+        user_ = User(fullname=fake.name(),
                      phone_number=fake.phone_number(),
                      email=fake.email(),
                      position=fake.job()).save()
