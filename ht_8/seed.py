@@ -2,24 +2,25 @@ import json
 from typing import Callable
 
 from mongoengine.errors import NotUniqueError
+# from pymongo.errors import DuplicateKeyError
 
 from models import Author, Quote
 
 
 def seed_authors(el: dict) -> None:
     try:
-        author = Author(fullname=el.get("fullname"), born_date=el.get("born_date"),
+        author = Author(full_name=el.get("full_name"), born_date=el.get("born_date"),
                         born_location=el.get("born_location"),
                         description=el.get("description"))
         author.save()
     except NotUniqueError:
-        print(f"Author already exists: {el.get('fullname')}")
+        print(f"Author already exists: {el.get('full_name')}")
 
 
 def seed_quotes(el: dict) -> None:
     try:
         # author, *_ = Author.objects(fullname=el.get("author"))
-        author = Author.objects.filter(fullname=el.get("author"))
+        author = Author.objects.filter(full_name=el.get("author"))
         # print(author.get().id)
         quote = Quote(author=author.get().id,
                       tags=el.get("tags"),
